@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import { connect } from "./event-store";
+// import { connect } from "./event-store";
 
 const PORT = 3000;
 
@@ -14,7 +14,7 @@ server.get("/hello", async (_request, reply) => {
 
 const startServer = async () => {
   try {
-    await connect();
+    // await connect();
     await server.listen(PORT);
     console.info(`Server started at port ${PORT}`);
   } catch (err) {
