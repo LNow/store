@@ -1,17 +1,17 @@
-version: '3.7'
+version: "3.7"
+
+volumes:
+    postgres_data:
 
 services:
-  eventstore.db:
-    image: eventstore/eventstore:21.10.0-buster-slim
-    environment:
-      - EVENTSTORE_CLUSTER_SIZE=1
-      - EVENTSTORE_RUN_PROJECTIONS=All
-      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
-      - EVENTSTORE_EXT_TCP_PORT=1113
-      - EVENTSTORE_HTTP_PORT=2113
-      - EVENTSTORE_INSECURE=true
-      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
-      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
-    ports:
-      - 1113:1113
-      - 2113:2113
+    postgres:
+        image: postgres:14.1-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./init-event-store.sql:/docker-entrypoint-initdb.d/init-event-store.sql
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password123
+        command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
